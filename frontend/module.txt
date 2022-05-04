@@ -1,0 +1,11 @@
+npm i bootstrap
+npm i i18next-browser-languagedetector
+npm i i18next-http-backend
+npm i i18next
+npm i react-bootstrap
+npm i react-dom
+npm i react-i18next
+npm i react-router-bootstrap
+npm i react-router-dom
+npm i react-select
+npm i -g typewriter-effect
