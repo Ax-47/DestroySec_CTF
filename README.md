@@ -18,7 +18,48 @@ create-react-app frontend
 ```
 npm i -g pm2@latest
 ```
+### เข้าไปใน react project ของเราเพื่อรันแอพ
+```
+cd frontend
+```
 ```
 pm2 start --name destroysec npm -- start 
 ```
+### เมื่อรันแล้วเว็บเราจะแสดงผลที่ 127.0.0.1:3000
 
+
+# Install Module for Project
+### ต้องติดตั้งเฉพาะในโฟลเดอร์ frontend ที่เราสร้าง
+```
+npm i bootstrap
+```
+```
+npm i i18next-browser-languagedetector
+```
+```
+npm i i18next-http-backend
+```
+```
+npm i i18next
+```
+```
+npm i react-bootstrap
+```
+```
+npm i react-dom
+```
+```
+npm i react-i18next
+```
+```
+npm i react-router-bootstrap
+```
+```
+npm i react-router-dom
+```
+```
+npm i react-select
+```
+```
+npm i -g typewriter-effect
+```
