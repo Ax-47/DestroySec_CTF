@@ -3,7 +3,13 @@
 
 
 
-## Config React For Project
+## 1.Install Module React For Project
 ```
 npm i -g create-react-app
 ```
+
+## 2.Create Project
+```
+create-react-app frontend
+```
+
