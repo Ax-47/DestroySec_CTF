@@ -1,3 +1,7 @@
+npm i -g create-react-app
+
+
+##### สำหรับลงโมดูลเฉพาะในไฟล์ frontend
 npm i bootstrap
 npm i i18next-browser-languagedetector
 npm i i18next-http-backend
