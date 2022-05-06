@@ -63,5 +63,5 @@ npm i react-router-dom
 npm i react-select
 ```
 ```
-npm i -g typewriter-effect
+npm i typewriter-effect --legacy-peer-deps
 ```
