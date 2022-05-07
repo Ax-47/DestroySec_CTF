@@ -1,8 +1,10 @@
 package path
 
 import (
+	"api/controller"
 	db "api/db"
 	h "api/hashpaww"
+	"api/service"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -58,9 +60,13 @@ func Login(c *gin.Context) {
 	session := sessions.Default(c)
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+	var loginService service.LoginService = service.StaticLoginService()
+	var jwtService service.JWTService = service.JWTAuthService()
+	var loginController controller.LoginController = controller.LoginHandler(loginService, jwtService)
+
 	var s db.Db_mongo
 	s.Db_start()
-
+	token := loginController.Login(c)
 	key := s.Db_FindtOne(username)
 	kpass := key[2]
 	has := kpass.Value.(string)
@@ -73,6 +79,7 @@ func Login(c *gin.Context) {
 		}
 		c.JSON(200, gin.H{
 			"message": "login suss",
+			"token":   token,
 		})
 	} else {
 
