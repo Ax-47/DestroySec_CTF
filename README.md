@@ -31,6 +31,10 @@ pm2 start --name destroysec npm -- start
 ```
 ### เมื่อรันแล้วเว็บเราจะแสดงผลที่ 127.0.0.1:3000
 
+```
+pm2 --save
+```
+
 
 # 4.Install Module for Project
 ### ต้องติดตั้งเฉพาะในโฟลเดอร์ frontend ที่เราสร้าง
