@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"api/dto"
-	"api/service"
+	"api/jwt/dto"
+	"api/jwt/service"
 
 	"github.com/gin-gonic/gin"
 )

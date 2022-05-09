@@ -1,24 +1,35 @@
 package main
 
 import (
-	"api/middleware"
 	p "api/path"
+	"errors"
+	"time"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	limiter "github.com/julianshen/gin-limiter"
 )
 
 func main() {
 	var secret = []byte("secret")
+
 	r := gin.Default()
+	lm := limiter.NewRateLimiter(time.Minute, 10, func(ctx *gin.Context) (string, error) {
+		key := ctx.Request.Header.Get("X-API-KEY")
+		if key != "" {
+			return key, nil
+		}
+		return "", errors.New("API key is missing")
+	})
 	r.Use(sessions.Sessions("DestroySce", sessions.NewCookieStore(secret)))
 	r.POST("/q", p.M)
-	r.POST("/register", p.Register)
-	r.POST("/login", p.Login)
-	v1 := r.Group("/v1")
-	v1.Use(middleware.AuthorizeJWT())
+	r.POST("/register", lm.Middleware(), p.Register)
+	r.POST("/login", lm.Middleware(), p.Login)
+
+	v1 := r.Group("/get")
+
 	{
-		v1.GET("/test", func(ctx *gin.Context) {
+		v1.GET("/api", func(ctx *gin.Context) {
 			ctx.JSON(200, gin.H{"message": "success"})
 		})
 	}
