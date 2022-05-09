@@ -75,7 +75,7 @@ npm i typewriter-effect --legacy-peer-deps
 npm i react-hook-form
 ```
 ```
-npm i @hookform/resolvers/yup
+npm install @hookform/resolvers yup
 ```
 ```
 npm i yup
