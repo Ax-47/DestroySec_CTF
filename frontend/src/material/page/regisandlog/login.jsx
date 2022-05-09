@@ -2,16 +2,9 @@
 import { useTranslation } from "react-i18next";
 
 
-
+import RegisSign from './signup';
 import { Link } from 'react-router-dom'
-import '../sign/signup'
 
-
-
-
-         
-
-    
 
 function RegisLog() {
   const { t } = useTranslation(["login"]);
@@ -42,7 +35,7 @@ function RegisLog() {
           <input type="submit" value="Login"/>
         </div>
         <div className="signup-link">
-          Not a member? <Link to="/signup"><a>Signup now</a></Link>
+          Not a member? <Link to="/register"><a>Signup now</a></Link>
         </div>
       </form>
       

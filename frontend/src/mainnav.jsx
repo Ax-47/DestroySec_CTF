@@ -70,7 +70,7 @@ function  Navapp() {
             
           </Nav>
           <Nav className='me-3'>
-            <Link to="/registerandlogin">
+            <Link to="/login">
             <Button variant="outline-warning" >{t("sign up sign in")}</Button>
             </Link>
           </Nav>

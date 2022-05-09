@@ -4,7 +4,8 @@ import Navapp from './mainnav';
 import Home from './material/page/index/index'
 import Features from './material/page/features';
 import Pricing from './material/page/pricing';
-import RegisLog from './material/page/regisandlog/login/login';
+import RegisLog from './material/page/regisandlog/login';
+import RegisSign from './material/page/regisandlog/signup';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 
@@ -20,7 +21,9 @@ function App() {
         </Route> 
         <Route path = '/pricing'element = { <Pricing/> } >
         </Route> 
-        <Route path = '/registerandlogin'element = { <RegisLog/> } > </Route> </Routes >
+        <Route path = '/login'element = { <RegisLog/> } > </Route> 
+        <Route path = '/register'element = { <RegisSign/> } > </Route> 
+        </Routes >
 
       </BrowserRouter>
     );

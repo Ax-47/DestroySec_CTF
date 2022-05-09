@@ -55,14 +55,15 @@ export default function RegisSign() {
             <div className="form-container">
                 <div className="form-inner">
                     <form onSubmit={handleSubmit(onSubmit)} className="login">
+                    <div className="field mt-4">
+                            <input placeholder="Username" name="username" className={`${errors.username ? 'is-invalid' : ''}`}/>
+                            <div className="invalid-feedback red">{errors.username?.message}</div>
+                        </div>
                         <div className="field mt-4">
                             <input placeholder="Email Address" name="email" {...register('email')} className={`text-white ${errors.email ? 'is-invalid' : ''}`} />
                             <div className="invalid-feedback red">{errors.email?.message}</div>
                         </div>
-                        <div className="field mt-4">
-                            <input placeholder="Username" name="username" className={`${errors.username ? 'is-invalid' : ''}`}/>
-                            <div className="invalid-feedback red">{errors.username?.message}</div>
-                        </div>
+                        
                         <div className="field mt-4">
                             <input placeholder="Password" name="password"
                                 type="password"
