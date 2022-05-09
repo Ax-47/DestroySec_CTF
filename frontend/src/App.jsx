@@ -1,10 +1,10 @@
 import React from 'react';
 //import './App.css';
 import Navapp from './mainnav';
-import Home from './page/index'
-import Features from './page/features';
-import Pricing from './page/pricing';
-import RegisLog from './page/regisandlog/login';
+import Home from './material/page/index/index'
+import Features from './material/page/features';
+import Pricing from './material/page/pricing';
+import RegisLog from './material/page/regisandlog/login/login';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 
