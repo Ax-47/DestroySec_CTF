@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import './mainnav.css'
+import './css/mainnav.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar';
 //import NavbarBrand from 'react-bootstrap/esm/NavbarBrand';

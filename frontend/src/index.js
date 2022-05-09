@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './material/css/index.css';
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './material/App';
+import reportWebVitals from './js/reportWebVitals';
 
-import "./i18n"
+import "./js/i18n"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render( <React.StrictMode >
+root.render( <React.StrictMode>
 
 
     <App/>
