@@ -39,44 +39,7 @@ pm2 --save
 # 4.Install Module for Project
 ### ต้องติดตั้งเฉพาะในโฟลเดอร์ frontend ที่เราสร้าง
 ```
-npm i bootstrap
+npm i 
 ```
-```
-npm i i18next-browser-languagedetector
-```
-```
-npm i i18next-http-backend
-```
-```
-npm i i18next
-```
-```
-npm i react-bootstrap
-```
-```
-npm i react-dom
-```
-```
-npm i react-i18next
-```
-```
-npm i react-router-bootstrap
-```
-```
-npm i react-router-dom
-```
-```
-npm i react-select
-```
-```
-npm i typewriter-effect --legacy-peer-deps
-```
-```
-npm i react-hook-form
-```
-```
-npm install @hookform/resolvers yup
-```
-```
-npm i yup
-```
+
+
