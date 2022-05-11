@@ -11,6 +11,7 @@ import './sign.css'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
+import axios from "axios";
 
 
 
@@ -23,20 +24,27 @@ export default function RegisSign() {
             .required('Email is mendatory')
             .matches(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Email is invalid'),
         username: Yup.string()
-            .required('Username is mendatory'),
+        .required('username is mendatory')
+
+            ,
         password: Yup.string()
             .required('Password is mendatory')
             .min(8, 'Password must be at 8 char long'),
         confirmPwd: Yup.string()
             .required('Password is mendatory')
             .oneOf([Yup.ref('password')], 'Passwords does not match'),
+
     })
 
     const formOptions = { resolver: yupResolver(formSchema) }
     const { register, handleSubmit, formState } = useForm(formOptions)
     const { errors } = formState
-    function onSubmit(data) {
-        console.log(JSON.stringify(data, null, 4))
+    async function onSubmit(data) {
+        
+        console.log(data['username'])
+        
+        var dff= axios({url:'http://localhost:3000/reg',method:"post",data:{username:data['username'],email:data['email'],password:data['password'],repassword:data['confirmPwd']},headers:{"X-API-KEY":"ax47"}});
+        console.log(await dff)
         return false
     }
 
@@ -56,7 +64,7 @@ export default function RegisSign() {
                 <div className="form-inner">
                     <form onSubmit={handleSubmit(onSubmit)} className="login">
                     <div className="field mt-4">
-                            <input placeholder="Username" name="username" className={`${errors.username ? 'is-invalid' : ''}`}/>
+                            <input placeholder="Username" name="username" {...register('username')} className={`${errors.username ? 'is-invalid' : ''}`}/>
                             <div className="invalid-feedback red">{errors.username?.message}</div>
                         </div>
                         <div className="field mt-4">
