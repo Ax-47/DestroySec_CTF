@@ -3,6 +3,7 @@ package path
 import (
 	db "api/db"
 	h "api/hashpaww"
+	"fmt"
 
 	"math/rand"
 	"time"
@@ -145,20 +146,13 @@ func Login(c *gin.Context) {
 		s.Db_start()
 		key := s.Db_FindtOne("email", email)
 		if key != nil {
-			const userkey = "email"
-			const timee = "time"
-			kk := key.Map()["subdata"]
-			if h.Vcheck(kk.(primitive.D).Map()["Password"].(string), password) {
-				if err := session.Save(); err != nil {
-					c.JSON(200, gin.H{"error": "Failed to save session"})
-					return
-				}
+			if h.Vcheck(key.Map()["subdata"].(primitive.D).Map()["Password"].(string), password) {
 				cookie := email
-				time := time.Now()
-				session.Set(userkey, time)
-				session.Set(timee, cookie)
-				if err := session.Save(); err != nil {
-					c.JSON(200, gin.H{"error": "Failed to save session"})
+				session.Set("email", cookie)
+				err := session.Save()
+				if err != nil {
+					fmt.Print(err)
+					c.JSON(404, gin.H{"error": "Failed to save session"})
 					return
 				}
 				c.JSON(200, gin.H{
