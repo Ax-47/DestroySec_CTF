@@ -3,12 +3,13 @@ package path
 import (
 	db "api/db"
 	h "api/hashpaww"
-	"time"
 
 	"math/rand"
+	"time"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func M(c *gin.Context) {
@@ -139,18 +140,15 @@ func Login(c *gin.Context) {
 	}
 	email := fromreg.Email
 	password := fromreg.Password
-
 	if email != "" || password != "" {
 		var s db.Db_mongo
 		s.Db_start()
-		key := s.Db_FindtOne("username", email)
+		key := s.Db_FindtOne("email", email)
 		if key != nil {
-			kpass := key[2]
-			has := kpass.Value.(string)
 			const userkey = "email"
 			const timee = "time"
-			if h.Vcheck(has, password) {
-
+			kk := key.Map()["subdata"]
+			if h.Vcheck(kk.(primitive.D).Map()["Password"].(string), password) {
 				if err := session.Save(); err != nil {
 					c.JSON(200, gin.H{"error": "Failed to save session"})
 					return

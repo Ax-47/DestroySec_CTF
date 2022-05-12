@@ -8,7 +8,7 @@ func Mhash(passworsd string) string {
 	password := []byte(passworsd)
 
 	// Hashing the password with the default cost of 10
-	hashedPassword, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword(password, 14)
 	if err != nil {
 		panic(err)
 	}
@@ -17,7 +17,8 @@ func Mhash(passworsd string) string {
 }
 
 func Vcheck(word, password string) bool {
+
 	err := bcrypt.CompareHashAndPassword([]byte(word), []byte(password))
-	//fmt.Println(err)
+
 	return err == nil
 }
