@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './material/css/index.css';
 
 import App from './App';
+
 import reportWebVitals from './js/reportWebVitals';
 
 import "./js/i18n"
@@ -12,7 +13,7 @@ root.render( <React.StrictMode>
 
 
     <App/>
-
+    
     </React.StrictMode>
 );
 

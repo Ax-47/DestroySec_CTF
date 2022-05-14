@@ -27,7 +27,7 @@ function RegisLog() {
       const { errors } = formState
       async function onSubmit(data) {
   
-          var dff= axios({url:'http://localhost:3000/ln',method:"post",data:{email:data['email'],password:data['password']},headers:{"X-API-KEY":"ax47"}});
+          var dff= axios({url:'http://localhost:9000/ln',method:"post",data:{email:data['email'],password:data['password']},headers:{"X-API-KEY":"ax47"}});
         console.log(await dff)
           return false
       }

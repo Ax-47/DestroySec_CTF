@@ -50,7 +50,7 @@ func main() {
 			ctx.JSON(200, gin.H{"message": "success"})
 		})
 	}
-	r.Run(":3000")
+	r.Run(":9000")
 
 	// listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	/*

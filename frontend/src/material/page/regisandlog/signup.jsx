@@ -43,7 +43,7 @@ export default function RegisSign() {
         
         console.log(data['username'])
         
-        var dff= axios({url:'http://localhost:3000/reg',method:"post",data:{username:data['username'],email:data['email'],password:data['password'],repassword:data['confirmPwd']},headers:{"X-API-KEY":"ax47"}});
+        var dff= axios({url:'http://localhost:9000/reg',method:"post",data:{username:data['username'],email:data['email'],password:data['password'],repassword:data['confirmPwd']},headers:{"X-API-KEY":"ax47"}});
         console.log(await dff)
         return false
     }
