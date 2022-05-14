@@ -13,6 +13,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+var s db.Db_mongo
+
+type DBb interface {
+	Register()
+}
+
 func M(c *gin.Context) {
 
 	Leve := c.PostForm("leve")
@@ -89,7 +95,7 @@ func Register(c *gin.Context) {
 	user := fromreg.Username
 	if user != "" || email != "" || repassword != "" || password != "" {
 		if password == repassword {
-			var s db.Db_mongo
+
 			s.Db_start()
 			ch := s.Db_FindtOne("email", email)
 
@@ -146,7 +152,7 @@ func Login(c *gin.Context) {
 		s.Db_start()
 		key := s.Db_FindtOne("email", email)
 		if key != nil {
-			if h.Vcheck(key.Map()["subdata"].(primitive.D).Map()["Password"].(string), password) {
+			if h.Vcheck(key.Map()["subdata"].(primitive.D).Map()["password"].(string), password) {
 				cookie := email
 				session.Set("email", cookie)
 				err := session.Save()
