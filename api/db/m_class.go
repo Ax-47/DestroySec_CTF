@@ -54,16 +54,17 @@ func (db Db_mongo) Db_InsertOneS(Insert interface{}) {
 		fmt.Print(err)
 	}
 }
-func (db Db_mongo) Db_FindtOne(dfkdf string, Username string) primitive.D {
+func (db Db_mongo) Db_FindtOne(dfkdf string, Username string, c chan primitive.D) error {
 	var result bson.D
 	f := bson.D{{dfkdf, Username}}
 	coll := db.collection
 	err := coll.FindOne(context.TODO(), f).Decode(&result)
 	if err != nil {
-		fmt.Print(err)
+		c <- result
+		return err
 	}
-
-	return result
+	c <- result
+	return nil
 }
 func (db Db_mongo) Db_FindALL(dfkdf string, something string) ([]primitive.M, error) {
 

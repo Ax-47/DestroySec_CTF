@@ -1,7 +1,7 @@
 package main
 
 import (
-	p "api/path"
+	p "api/compile_path"
 	"errors"
 	"time"
 
