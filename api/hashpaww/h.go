@@ -16,9 +16,12 @@ func Mhash(passworsd string) string {
 	return string(hashedPassword)
 }
 
-func Vcheck(word, password string) bool {
+func Vcheck(word, password string, bo chan bool) {
 
 	err := bcrypt.CompareHashAndPassword([]byte(word), []byte(password))
-
-	return err == nil
+	if err == nil {
+		bo <- true
+	} else {
+		bo <- false
+	}
 }

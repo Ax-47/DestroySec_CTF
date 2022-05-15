@@ -20,14 +20,17 @@ func Login(c *gin.Context, s db.Db_mongo) {
 		return
 	}
 	email := fromreg.Email
+	cha := make(chan primitive.D)
+	go s.Db_FindtOne("email", email, cha)
 	password := fromreg.Password
-	if email != "" || password != "" {
-		ch := make(chan primitive.D)
-		go s.Db_FindtOne("email", email, ch)
-		key := <-ch
-		if key != nil {
 
-			if h.Vcheck(key.Map()["subdata"].(primitive.D).Map()["password"].(string), password) {
+	if email != "" || password != "" {
+
+		key := <-cha
+		if key != nil {
+			ds := make(chan bool)
+			go h.Vcheck(key.Map()["subdata"].(primitive.D).Map()["password"].(string), password, ds)
+			if <-ds {
 
 				c.JSON(200, gin.H{
 					"message": "login suss",

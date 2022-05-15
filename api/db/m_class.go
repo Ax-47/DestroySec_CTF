@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"time"
-
+	//"github.com/globalsign/mgo"
+	//"github.com/globalsign/mgo/bson"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -57,8 +58,8 @@ func (db Db_mongo) Db_InsertOneS(Insert interface{}) {
 func (db Db_mongo) Db_FindtOne(dfkdf string, Username string, c chan primitive.D) error {
 	var result bson.D
 	f := bson.D{{dfkdf, Username}}
-	coll := db.collection
-	err := coll.FindOne(context.TODO(), f).Decode(&result)
+
+	err := db.collection.FindOne(context.TODO(), f).Decode(&result)
 	if err != nil {
 		c <- result
 		return err
