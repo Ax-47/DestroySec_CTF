@@ -41,5 +41,5 @@ pm2 --save
 ```
 npm i 
 ```
-
+# 5 python manage.py runserver
 
