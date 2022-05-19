@@ -1,34 +1,34 @@
 package middleware
 
 import (
-	"api/jwt/service"
 	"fmt"
 	"net/http"
+	"strings"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
-func AuthorizeJWT() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		const BEARER_SCHEMA = "Bearer "
-		authHeader := c.GetHeader("Authorization")
-
-		tokenString := authHeader[len(BEARER_SCHEMA):]
-
-		if token, err := service.JWTAuthService().ValidateToken(tokenString); err != nil {
-			c.JSON(200, gin.H{"error": "Failed to save session"})
-			return
-		} else {
-			if token.Valid {
-				claims := token.Claims.(jwt.MapClaims)
-				fmt.Println(claims)
-			} else {
-				fmt.Println("testing")
-				fmt.Println(err)
-				c.AbortWithStatus(http.StatusUnauthorized)
-			}
+func validateToken(token string) error {
+	_, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
 
+		return []byte("MySignature"), nil
+	})
+
+	return err
+}
+func AuthorizeJWT(c *gin.Context) {
+
+	s := c.Request.Header.Get("Authorization")
+
+	token := strings.TrimPrefix(s, "Bearer ")
+
+	if err := validateToken(token); err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
+
 }

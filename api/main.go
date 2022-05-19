@@ -1,6 +1,7 @@
 package main
 
 import (
+	jwt "api/jwt/middleware"
 	p "api/path/compile_path"
 	"errors"
 	"time"
@@ -39,9 +40,10 @@ func main() {
 		return "", errors.New("API key is missing")
 	})
 	r.Use(sessions.Sessions("DestroySce", sessions.NewCookieStore(secret)))
-	r.POST("/q", p.M)
-	r.POST("/reg", lm.Middleware(), p.Register)
-	r.POST("/ln", lm.Middleware(), p.Login)
+	api := r.Group("/", jwt.AuthorizeJWT)
+	api.POST("/q", p.M)
+	api.POST("/reg", lm.Middleware(), p.Register)
+	api.POST("/ln", lm.Middleware(), p.Login)
 
 	v1 := r.Group("/get")
 
