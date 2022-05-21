@@ -2,7 +2,7 @@ package register
 
 import (
 	db "api/db"
-	h "api/hashpaww"
+	h "api/hash_class"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"

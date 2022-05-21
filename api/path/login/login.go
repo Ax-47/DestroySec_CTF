@@ -3,7 +3,7 @@ package login
 import (
 	"api/cookie"
 	db "api/db"
-	h "api/hashpaww"
+	h "api/hash_class"
 	jwt "api/jwt/service"
 
 	//"fmt"
