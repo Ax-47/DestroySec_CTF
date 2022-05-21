@@ -3,7 +3,7 @@ import axios from "axios";
 
 import RegisSign from './signup';
 import { Link } from 'react-router-dom'
-
+import { useCookies } from 'react-cookie'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -24,12 +24,18 @@ function RegisLog() {
   
   const formOptions = { resolver: yupResolver(formSchema) }
       const { register, handleSubmit, formState } = useForm(formOptions)
+     
       const { errors } = formState
       async function onSubmit(data) {
-  
-          var dff= axios({url:'http://localhost:9000/ln',method:"post",data:{email:data['email'],password:data['password']},headers:{"X-API-KEY":"ax47"}});
-        console.log(await dff)
-          return false
+        
+          var dff= axios({url:'http://localhost:9000/apilogin/ln',method:"post",data:{email:data['email'],password:data['password']},headers:{"X-API-KEY":"ax47"}});
+          
+          console.log(await (await dff).data["jwt"])
+        
+    
+
+
+          return true
       }
 
   const { t } = useTranslation(["login"]);

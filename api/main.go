@@ -1,11 +1,13 @@
 package main
 
 import (
+	jwt "api/jwt/service"
 	p "api/path/compile_path"
 	"errors"
 	"time"
 
-	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	limiter "github.com/julianshen/gin-limiter"
 )
@@ -26,10 +28,11 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 func main() {
-	var secret = []byte("secret")
 
 	r := gin.Default()
-
+	store := cookie.NewStore([]byte("secret"))
+	//sessionNames := []string{"DestorySce", "Just kidding"}
+	r.Use(sessions.Sessions("DestorySce", store))
 	r.Use(CORSMiddleware())
 	lm := limiter.NewRateLimiter(time.Minute, 10, func(ctx *gin.Context) (string, error) {
 		key := ctx.Request.Header.Get("X-API-KEY")
@@ -38,10 +41,12 @@ func main() {
 		}
 		return "", errors.New("API key is missing")
 	})
-	r.Use(sessions.Sessions("DestroySce", sessions.NewCookieStore(secret)))
-	r.POST("/q", p.M)
-	r.POST("/reg", lm.Middleware(), p.Register)
-	r.POST("/ln", lm.Middleware(), p.Login)
+
+	api := r.Group("/", jwt.AuthorizeJWT)
+	api.POST("/q", p.M)
+	api.POST("/reg", lm.Middleware(), p.Register)
+	apilogin := r.Group("/apilogin")
+	apilogin.POST("/ln", lm.Middleware(), p.Login)
 
 	v1 := r.Group("/get")
 

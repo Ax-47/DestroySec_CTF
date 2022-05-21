@@ -2,71 +2,47 @@ package service
 
 import (
 	"fmt"
-	"os"
+	"net/http"
+	"strings"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 //jwt service
-type JWTService interface {
-	GenerateToken(email string, isUser bool) string
-	ValidateToken(token string) (*jwt.Token, error)
+func GenerateToken(c *gin.Context, key string, otp int64) (string,error) {
+	token := jwt.NewWithClaims(
+		jwt.SigningMethodHS512,
+		&jwt.StandardClaims{
+			Audience:  key,
+			IssuedAt:  otp,
+			ExpiresAt: time.Now().Add(5 * time.Minute).Unix(),
+		})
+
+	ss, err := token.SignedString([]byte("MySignature"))
+	return ss, err
 }
-type authCustomClaims struct {
-	Name string `json:"name"`
-	User bool   `json:"user"`
-	jwt.StandardClaims
-}
-
-type jwtServices struct {
-	secretKey string
-	issure    string
-}
-
-//auth-jwt
-func JWTAuthService() JWTService {
-	return &jwtServices{
-		secretKey: getSecretKey(),
-		issure:    "Bikash",
-	}
-}
-
-func getSecretKey() string {
-	secret := os.Getenv("SECRET")
-	if secret == "" {
-		secret = "secret"
-	}
-	return secret
-}
-
-func (service *jwtServices) GenerateToken(email string, isUser bool) string {
-	claims := &authCustomClaims{
-		email,
-		isUser,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 48).Unix(),
-			Issuer:    service.issure,
-			IssuedAt:  time.Now().Unix(),
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	//encoded string
-	t, err := token.SignedString([]byte(service.secretKey))
-	if err != nil {
-		panic(err)
-	}
-	return t
-}
-
-func (service *jwtServices) ValidateToken(encodedToken string) (*jwt.Token, error) {
-	return jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
-		if _, isvalid := token.Method.(*jwt.SigningMethodHMAC); !isvalid {
-			return nil, fmt.Errorf("Invalid token", token.Header["alg"])
-
+func validateToken(token string) error {
+	_, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
-		return []byte(service.secretKey), nil
+
+		return []byte("MySignature"), nil
 	})
+
+	return err
+}
+func AuthorizeJWT(c *gin.Context) {
+
+	s := c.Request.Header.Get("Authorization")
+
+	token := strings.TrimPrefix(s, "Bearer ")
+
+	if err := validateToken(token); err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
 }
