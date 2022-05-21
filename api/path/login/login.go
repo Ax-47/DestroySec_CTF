@@ -1,17 +1,16 @@
 package login
 
 import (
+	"api/cookie"
 	db "api/db"
 	h "api/hashpaww"
+	jwt "api/jwt/service"
+
+	//"fmt"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-type ln struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
 
 func Login(c *gin.Context, s db.Db_mongo) {
 
@@ -29,11 +28,22 @@ func Login(c *gin.Context, s db.Db_mongo) {
 		key := <-cha
 		if key != nil {
 			ds := make(chan bool)
-			go h.Vcheck(key.Map()["subdata"].(primitive.D).Map()["password"].(string), password, ds)
-			if <-ds {
+			ps := key.Map()["subdata"].(primitive.D).Map()["password"].(string)
+			go h.Vcheck(ps, password, ds)
 
+			if <-ds {
+				un := key.Map()["username"].(string)
+				g, _ := jwt.GenerateToken(c, un, int64(60456))
+				Xx := Datacookie{
+					user:   un,
+					passed: ps,
+				}
+
+				cookie.Cookieee_set(c, Xx)
+				//cookie.Cookieee_Get(c, []string{"user", "passed"}...)
 				c.JSON(200, gin.H{
 					"message": "login suss",
+					"jwt":     g,
 				})
 			} else {
 
