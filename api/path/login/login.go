@@ -1,12 +1,10 @@
 package login
 
 import (
-	"api/cookie"
 	db "api/db"
 	h "api/hash_class"
 	jwt "api/jwt/service"
-
-	//"fmt"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -33,14 +31,8 @@ func Login(c *gin.Context, s db.Db_mongo) {
 
 			if <-ds {
 				un := key.Map()["username"].(string)
-				g, _ := jwt.GenerateToken(c, un, int64(60456))
-				Xx := Datacookie{
-					user:   un,
-					passed: ps,
-				}
-
-				cookie.Cookieee_set(c, Xx)
-				//cookie.Cookieee_Get(c, []string{"user", "passed"}...)
+				g, _ := jwt.GenerateToken(c, un, "1", int64(60456))
+				fmt.Println(g)
 				c.JSON(200, gin.H{
 					"message": "login suss",
 					"jwt":     g,

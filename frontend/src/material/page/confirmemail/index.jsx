@@ -2,10 +2,12 @@ import './index.css'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-
+import axios from "axios"
+import Cookies from 'universal-cookie';
 
 export default function Confirmotp() {
-
+  const cookies = new Cookies();
+  var dff= axios({url:'http://localhost:9000/q',method:"post",headers:{"jwt":cookies.get("Destroy")}});
     const formSchema = Yup.object().shape({
         otp: Yup.string()
           .required('otp is require')
@@ -23,8 +25,8 @@ export default function Confirmotp() {
             console.log(data)
           }
 
-
     return(
+      
         <div className="wrapper">
           
                <form  onSubmit={handleSubmit(onSubmit)} className="otpformad">
