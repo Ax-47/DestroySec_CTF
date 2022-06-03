@@ -35,7 +35,7 @@ function RegisLog() {
             window.location.href="/confirm"
             var $tham_po_mue_doo =await (await dff).data["jwt"];
 
-            cookies.set('Destroy',$tham_po_mue_doo, { path: '/' });  
+            cookies.set('Destroy',$tham_po_mue_doo, { path: '/',SameSite:"None",secure:true });  
          
           }
         

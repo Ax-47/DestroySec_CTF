@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie';
 
 export default function Confirmotp() {
   const cookies = new Cookies();
+  //
   var dff= axios({url:'http://localhost:9000/q',method:"post",headers:{"jwt":cookies.get("Destroy")}});
     const formSchema = Yup.object().shape({
         otp: Yup.string()

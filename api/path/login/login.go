@@ -4,11 +4,19 @@ import (
 	db "api/db"
 	h "api/hash_class"
 	jwt "api/jwt/service"
-	"fmt"
+
+	//"fmt"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type DATA struct {
+	Sessions_DATA struct {
+		session string
+	}
+}
 
 func Login(c *gin.Context, s db.Db_mongo) {
 
@@ -32,7 +40,10 @@ func Login(c *gin.Context, s db.Db_mongo) {
 			if <-ds {
 				un := key.Map()["username"].(string)
 				g, _ := jwt.GenerateToken(c, un, "1", int64(60456))
-				fmt.Println(g)
+				var post DATA
+
+				post.Sessions_DATA.session = g
+				go s.Db_FixOneStuck(bson.M{"email": bson.M{"$eq": email}, "username": bson.M{"$eq": un}}, bson.M{"$addToSet": bson.M{"Sessions": bson.M{"$each": []string{g}}}})
 				c.JSON(200, gin.H{
 					"message": "login suss",
 					"jwt":     g,

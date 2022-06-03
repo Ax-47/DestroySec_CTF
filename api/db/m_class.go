@@ -48,6 +48,17 @@ type DATA struct {
 	}
 }
 
+func (db Db_mongo) Db_FixOneStuck(filter, update interface{}) {
+
+	_, err := db.collection.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+	)
+	if err != nil {
+		fmt.Print(err)
+	}
+}
 func (db Db_mongo) Db_InsertOneS(Insert interface{}) {
 
 	_, err := db.collection.InsertOne(context.TODO(), Insert)
