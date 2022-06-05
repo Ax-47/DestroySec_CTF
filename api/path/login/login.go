@@ -2,10 +2,11 @@ package login
 
 import (
 	db "api/db"
+	"api/gmail"
 	h "api/hash_class"
 	jwt "api/jwt/service"
 
-	//"fmt"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -18,7 +19,7 @@ type DATA struct {
 	}
 }
 
-func Login(c *gin.Context, s db.Db_mongo) {
+func Login(c *gin.Context, s db.Db_mongo, am gmail.GAmll) {
 
 	var fromreg ln
 	if err := c.BindJSON(&fromreg); err != nil {
@@ -40,10 +41,10 @@ func Login(c *gin.Context, s db.Db_mongo) {
 			if <-ds {
 				un := key.Map()["username"].(string)
 				g, _ := jwt.GenerateToken(c, un, "1", int64(60456))
-				var post DATA
-
-				post.Sessions_DATA.session = g
-				go s.Db_FixOneStuck(bson.M{"email": bson.M{"$eq": email}, "username": bson.M{"$eq": un}}, bson.M{"$addToSet": bson.M{"Sessions": bson.M{"$each": []string{g}}}})
+				jwthash := h.Mhash(g + ", " + GenOTP())
+				fmt.Println(jwthash)
+				go s.Db_FixOneStuck(bson.M{"email": bson.M{"$eq": email}, "username": bson.M{"$eq": un}}, bson.M{"$addToSet": bson.M{"Sessions": bson.M{"$each": []string{jwthash}}}})
+				am.SEndlogin(un, GenOTP())
 				c.JSON(200, gin.H{
 					"message": "login suss",
 					"jwt":     g,

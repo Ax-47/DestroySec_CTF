@@ -1,9 +1,16 @@
 package login
 
 import (
-	"github.com/gin-gonic/gin"
+	"math/rand"
 )
 
-func cookie(c *gin.Context, data string) {
+func GenOTP() string {
+
+	bytes := make([]byte, 6)
+	var pool = "1234567890abcdefghijklmopqrsyz"
+	for i := 0; i < 6; i++ {
+		bytes[i] = pool[rand.Intn(len(pool))]
+	}
+	return string(bytes)
 
 }

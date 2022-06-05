@@ -19,8 +19,7 @@ func AuthorizationMiddleware(c *gin.Context) {
 
 	token := strings.TrimPrefix(s, "Bearer ")
 	//_ , err := jwt.DecodeToken(token)
-	fmt.Println(request)
-	fmt.Println(s)
+
 	if err := jwt.ValidateToken(token); err != nil {
 		c.AbortWithStatus(505)
 		return

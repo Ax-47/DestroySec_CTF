@@ -2,6 +2,7 @@ package path
 
 import (
 	db "api/db"
+	"api/gmail"
 	p "api/path/login"
 	P "api/path/register"
 
@@ -12,9 +13,11 @@ import (
 )
 
 var s db.Db_mongo
+var g gmail.GAmll
 
 func init() {
 	s.Db_start()
+	g.Login("ax47chaos@gmail.com", "mki8mki8")
 }
 
 func M(c *gin.Context) {
@@ -53,5 +56,5 @@ func Register(c *gin.Context) {
 }
 func Login(c *gin.Context) {
 
-	p.Login(c, s)
+	p.Login(c, s, g)
 }

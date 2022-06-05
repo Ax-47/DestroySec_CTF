@@ -56,7 +56,7 @@ func (db Db_mongo) Db_FixOneStuck(filter, update interface{}) {
 		update,
 	)
 	if err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 	}
 }
 func (db Db_mongo) Db_InsertOneS(Insert interface{}) {
