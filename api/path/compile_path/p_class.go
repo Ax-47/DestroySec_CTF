@@ -2,18 +2,22 @@ package path
 
 import (
 	db "api/db"
-
+	"api/gmail"
 	p "api/path/login"
 	P "api/path/register"
-	"math/rand"
 
+	//"fmt"
+
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 var s db.Db_mongo
+var g gmail.GAmll
 
 func init() {
 	s.Db_start()
+	g.Login("ax47chaos@gmail.com", "mki8mki8")
 }
 
 func M(c *gin.Context) {
@@ -34,48 +38,23 @@ func M(c *gin.Context) {
 	}
 
 }
+func C(c *gin.Context) {
+	session := sessions.Default(c)
 
-type DATA struct {
-	Email                 string
-	Username, Tag, UserId string
-	Subdata               struct {
-		Password string
-	}
+	v := session.Get("user")
+
+	g, _ := 11, 22
+
+	session.Set("user", g)
+	session.Save()
+	c.JSON(200, gin.H{"count": v})
 }
 
-func GanuserTag(s db.Db_mongo) string {
-	for {
-		bytes := make([]byte, 4)
-		var pool = "1234567890"
-		for i := 0; i < 4; i++ {
-			bytes[i] = pool[rand.Intn(len(pool))]
-		}
-		some, _ := s.Db_FindALL("userid", string(bytes))
-		if some == nil {
-			return string(bytes)
-		}
-	}
-
-}
-func Ganuserid(s db.Db_mongo) string {
-	for {
-		var pool = "1234567890"
-		dd := make([]byte, 13)
-		for i := 0; i < 13; i++ {
-			dd[i] = pool[rand.Intn(len(pool))]
-		}
-		some, _ := s.Db_FindALL("userid", string(dd))
-		if some == nil {
-			return string(dd)
-		}
-	}
-
-}
 func Register(c *gin.Context) {
 
 	P.Register(c, s)
 }
 func Login(c *gin.Context) {
 
-	p.Login(c, s)
+	p.Login(c, s, g)
 }

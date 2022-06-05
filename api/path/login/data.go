@@ -3,6 +3,7 @@ package login
 type Datacookie struct {
 	user   string
 	passed string
+	ver    bool
 }
 type GetDatacookie struct {
 	Key []string

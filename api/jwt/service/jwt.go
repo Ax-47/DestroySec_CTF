@@ -2,8 +2,7 @@ package service
 
 import (
 	"fmt"
-	"net/http"
-	"strings"
+
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -11,19 +10,21 @@ import (
 )
 
 //jwt service
-func GenerateToken(c *gin.Context, key string, otp int64) (string,error) {
+func GenerateToken(c *gin.Context, key string, stats string, otp int64) (string, error) {
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS512,
 		&jwt.StandardClaims{
 			Audience:  key,
 			IssuedAt:  otp,
+			Subject:   stats,
 			ExpiresAt: time.Now().Add(5 * time.Minute).Unix(),
 		})
 
 	ss, err := token.SignedString([]byte("MySignature"))
+
 	return ss, err
 }
-func validateToken(token string) error {
+func ValidateToken(token string) error {
 	_, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
@@ -34,15 +35,13 @@ func validateToken(token string) error {
 
 	return err
 }
-func AuthorizeJWT(c *gin.Context) {
+func DecodeToken(token string) (*jwt.Token, error) {
+	kk, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
 
-	s := c.Request.Header.Get("Authorization")
-
-	token := strings.TrimPrefix(s, "Bearer ")
-
-	if err := validateToken(token); err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
-
+		return []byte("MySignature"), nil
+	})
+	return kk, err
 }
