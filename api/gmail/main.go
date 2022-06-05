@@ -20,13 +20,13 @@ type GAmll struct {
 
 func (g *GAmll) Login(Email, Password string) {
 
-	auth = smtp.PlainAuth("", "ax47chaos@gmail.com", "mki8mki8", "smtp.gmail.com")
+	auth = smtp.PlainAuth("", "hee@gmail.com", "hee", "smtp.gmail.com")
 	//"ax47chaos@gmail.com", "mki8mki8"
 }
 func (g GAmll) SEndlogin(Username, otp string) {
-	from := "axc47chaos@gmail.com"
-	password := "mki8mki8"
-	toList := []string{"axc47y@gmail.com"}
+	from := "hee@gmail.com"
+	password := "heeheehee"
+	toList := []string{"heehee@gmail.com"}
 	host := "smtp.gmail.com"
 	port := "587"
 	msg := "Hello geeks!!!"
