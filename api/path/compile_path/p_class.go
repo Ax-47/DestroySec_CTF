@@ -13,11 +13,11 @@ import (
 )
 
 var s db.Db_mongo
-var g gmail.GAmll
+var am gmail.GAmll
 
 func init() {
 	s.Db_start()
-	g.Login("ax47chaos@gmail.com", "mki8mki8")
+	am.Login("ax47chaos@gmail.com", "eaighfojzsjfhtda")
 }
 
 func M(c *gin.Context) {
@@ -56,5 +56,5 @@ func Register(c *gin.Context) {
 }
 func Login(c *gin.Context) {
 
-	p.Login(c, s, g)
+	p.Login(c, s, am)
 }

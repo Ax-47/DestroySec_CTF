@@ -40,11 +40,12 @@ func Login(c *gin.Context, s db.Db_mongo, am gmail.GAmll) {
 
 			if <-ds {
 				un := key.Map()["username"].(string)
+				tag := key.Map()["tag"].(string)
 				g, _ := jwt.GenerateToken(c, un, "1", int64(60456))
 				jwthash := h.Mhash(g + ", " + GenOTP())
 				fmt.Println(jwthash)
 				go s.Db_FixOneStuck(bson.M{"email": bson.M{"$eq": email}, "username": bson.M{"$eq": un}}, bson.M{"$addToSet": bson.M{"Sessions": bson.M{"$each": []string{jwthash}}}})
-				am.SEndlogin(un, GenOTP())
+				am.SEndlogin(un, tag, GenOTP())
 				c.JSON(200, gin.H{
 					"message": "login suss",
 					"jwt":     g,
