@@ -19,7 +19,7 @@ var am gmail.GAmll
 
 func init() {
 	s.Db_start()
-	am.Login("axc47chaos@gmail.com", "eaighfojzsjfhtda")
+	am.Login("...@gmail.com", "......")
 }
 
 func M(c *gin.Context) {

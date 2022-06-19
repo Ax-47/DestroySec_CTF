@@ -2,18 +2,14 @@ package verify
 
 import (
 	db "api/db"
-	"fmt"
+	//"fmt"
 	"math/rand"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GenKEy(s db.Db_mongo, datauser primitive.D) string {
-	list := datauser.Map()["SessionAuthor"].(primitive.A)
-	for a, v := range list {
-		fmt.Println(v)
-		fmt.Println(a)
-	}
+
 	bytes := make([]byte, 19)
 	var pool = "234567890abcdefghijxk2345678lmopqrsx2345678yzabxcdxefghxijkl2345678mopqrsyzx???>><<|\\}{!#@$%^&*())__"
 	for i := 0; i < 19; i++ {
