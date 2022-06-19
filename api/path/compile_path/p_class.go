@@ -5,6 +5,8 @@ import (
 	"api/gmail"
 	p "api/path/login"
 	P "api/path/register"
+	v "api/path/verify_gmail"
+	vu "api/path/verifyuser"
 
 	//"fmt"
 
@@ -17,7 +19,7 @@ var am gmail.GAmll
 
 func init() {
 	s.Db_start()
-	am.Login("ax47chaos@gmail.com", "eaighfojzsjfhtda")
+	am.Login("axc47chaos@gmail.com", "eaighfojzsjfhtda")
 }
 
 func M(c *gin.Context) {
@@ -38,6 +40,14 @@ func M(c *gin.Context) {
 	}
 
 }
+func Verifyotp_func(c *gin.Context) {
+	v.Verifyotp(c, s)
+
+}
+func Verifyotp_Reg_func(c *gin.Context) {
+	vu.Verifyotp(c, s)
+
+}
 func C(c *gin.Context) {
 	session := sessions.Default(c)
 
@@ -52,7 +62,7 @@ func C(c *gin.Context) {
 
 func Register(c *gin.Context) {
 
-	P.Register(c, s)
+	P.Register(c, s, am)
 }
 func Login(c *gin.Context) {
 
