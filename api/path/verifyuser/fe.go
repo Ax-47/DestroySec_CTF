@@ -21,7 +21,7 @@ func GenKEy() string {
 	return string(bytes)
 
 }
-func SaveDAta(s db.Db_mongo, email, password, user, tag, time, id string) string {
+func SaveDAta(s db.Db_mongo, email, password, user, tag, time, id, OBJ string) {
 	var post DATA
 	post.Time = time
 	post.Email = email
@@ -30,8 +30,8 @@ func SaveDAta(s db.Db_mongo, email, password, user, tag, time, id string) string
 	post.UserId = id
 
 	post.Tag = tag
-	OBJ := GenKEy()
+
 	s.Db_InsertOneS(post)
 	s.Db_FixOneStuck(bson.M{"email": bson.M{"$eq": email}, "tag": bson.M{"$eq": tag}, "username": bson.M{"$eq": user}}, bson.M{"$push": bson.M{"SessionAuthor": OBJ}})
-	return OBJ
+
 }

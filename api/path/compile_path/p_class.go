@@ -5,12 +5,12 @@ import (
 	"api/gmail"
 	p "api/path/login"
 	P "api/path/register"
+	C "api/path/verify"
 	v "api/path/verify_gmail"
 	vu "api/path/verifyuser"
 
 	//"fmt"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,7 +19,7 @@ var am gmail.GAmll
 
 func init() {
 	s.Db_start()
-	am.Login("...@gmail.com", "......")
+	am.Login(".....@gmail.com", "......")
 }
 
 func M(c *gin.Context) {
@@ -48,16 +48,9 @@ func Verifyotp_Reg_func(c *gin.Context) {
 	vu.Verifyotp(c, s)
 
 }
-func C(c *gin.Context) {
-	session := sessions.Default(c)
+func Verifpermis(c *gin.Context) {
+	C.Check(c, s)
 
-	v := session.Get("user")
-
-	g, _ := 11, 22
-
-	session.Set("user", g)
-	session.Save()
-	c.JSON(200, gin.H{"count": v})
 }
 
 func Register(c *gin.Context) {

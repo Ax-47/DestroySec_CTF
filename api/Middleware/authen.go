@@ -22,7 +22,7 @@ func AuthorizationMiddleware(c *gin.Context) {
 	//_ , err := jwt.DecodeToken(token)
 
 	if err := jwt.ValidateToken(s); err != nil {
-
+		fmt.Print(err)
 		c.AbortWithStatus(505)
 		return
 	}

@@ -65,7 +65,10 @@ func Verifyotp(c *gin.Context, s db.Db_mongo) {
 			go h.Vcheck(split[0], Ax.Jwt, ds)
 			if <-ds && <-Aha {
 				password := ax["subdata"].(primitive.D).Map()["password"].(string)
-				OBJ := SaveDAta(s, email, password, un, tag, ax["time"].(string), ax["userid"].(string))
+				OBJ := GenKEy()
+				hash, _ := jw.GenerateTokenNEW(c, tag, un, OBJ)
+				hashJWt := h.Mhash(hash)
+				SaveDAta(s, email, password, un, tag, ax["time"].(string), ax["userid"].(string), hashJWt)
 				s.Db_Delete_UniDentify(bson.M{"email": bson.M{"$eq": email}})
 
 				c.JSON(200, gin.H{

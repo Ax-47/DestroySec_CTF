@@ -68,8 +68,12 @@ func Verifyotp(c *gin.Context, s db.Db_mongo) {
 						//fmt.Print(ps)
 
 						//s.Db_FixOneStuck(bson.M{"tag": bson.M{"$eq": tag}, "username": bson.M{"$eq": un}}, bson.M{"$unset": bson.M{"SessionOTP": bson.A{bson.M{timestap: Ax.Jwt}}}})
-						OBJ := GenKEy(s, some[0])
-						s.Db_FixOneStuck(bson.M{"tag": bson.M{"$eq": tag}, "username": bson.M{"$eq": un}}, bson.M{"$push": bson.M{"SessionAuthor": OBJ}})
+
+						OBJ := GenKEy()
+						hash, _ := jw.GenerateTokenNEW(c, tag, un, OBJ)
+						hashJWt := h.Mhash(hash)
+						//SaveDAta(s, email, password, un, tag, ax["time"].(string), ax["userid"].(string), hashJWt)
+						s.Db_FixOneStuck(bson.M{"tag": bson.M{"$eq": tag}, "username": bson.M{"$eq": un}}, bson.M{"$push": bson.M{"SessionAuthor": hashJWt}})
 						s.Db_FixOneStuck(bson.M{"tag": bson.M{"$eq": tag}, "username": bson.M{"$eq": un}}, bson.M{"$unset": bson.M{"SessionOTP.$[]": num}})
 
 						c.JSON(200, gin.H{

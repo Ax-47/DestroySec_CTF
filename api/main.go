@@ -49,6 +49,7 @@ func main() {
 	api.POST("/q", lm.Middleware(), p.M)
 	api.POST("/verifyotp", lm.Middleware(), p.Verifyotp_func)
 	api.POST("/AK", lm.Middleware(), p.Verifyotp_Reg_func)
+	api.POST("/checkpermis", p.Verifpermis)
 	//apilogin.GET("/Check", p.C)
 	r.Run(":9000")
 

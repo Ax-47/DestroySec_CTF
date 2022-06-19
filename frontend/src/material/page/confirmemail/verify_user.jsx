@@ -22,8 +22,15 @@ export default function Confirmotp() {
           const { errors } = formState
           async function onSubmit(data) {
             var dff= axios({url:'http://localhost:9000/AK',method:"post",headers:{"jwt":cookies.get("Destroy"),"otp":data["otp"],"X-API-KEY":"ax47"}});
- 
-            cookies.set('Destroy',await dff, { path: '/',SameSite:"None",secure:true });
+            if (await (await dff).status ===200){
+              window.location.href="/features"
+              var $tham_po_mue_doo =await (await dff).data["djkfhjdhgfjdfd"];
+  
+              cookies.set('Destroy',$tham_po_mue_doo , { path: '/',SameSite:"None",secure:true });
+           
+            }
+            
+          
           }
 
     return(
