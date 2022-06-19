@@ -17,7 +17,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With,X-API-KEY, jwt")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With,X-API-KEY, jwt,otp")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
 
 		if c.Request.Method == "OPTIONS" {
@@ -46,9 +46,10 @@ func main() {
 	apilogin := r.Group("/apilogin")
 	apilogin.POST("/ln", lm.Middleware(), p.Login) //fix this
 	apilogin.POST("/reg", lm.Middleware(), p.Register)
-	api.POST("/q", p.M)
-
-	apilogin.GET("/Check", p.C)
+	api.POST("/q", lm.Middleware(), p.M)
+	api.POST("/verifyotp", lm.Middleware(), p.Verifyotp_func)
+	api.POST("/AK", lm.Middleware(), p.Verifyotp_Reg_func)
+	//apilogin.GET("/Check", p.C)
 	r.Run(":9000")
 
 	// listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

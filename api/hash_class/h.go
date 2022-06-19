@@ -1,6 +1,8 @@
 package hashpaww
 
 import (
+	//"fmt"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,6 +21,7 @@ func Mhash(passworsd string) string {
 func Vcheck(word, password string, bo chan bool) {
 
 	err := bcrypt.CompareHashAndPassword([]byte(word), []byte(password))
+
 	if err == nil {
 		bo <- true
 	} else {

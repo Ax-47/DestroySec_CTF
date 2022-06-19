@@ -6,7 +6,7 @@ import (
 	h "api/hash_class"
 	jwt "api/jwt/service"
 
-	"fmt"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -37,15 +37,18 @@ func Login(c *gin.Context, s db.Db_mongo, am gmail.GAmll) {
 			ds := make(chan bool)
 			ps := key.Map()["subdata"].(primitive.D).Map()["password"].(string)
 			go h.Vcheck(ps, password, ds)
-
 			if <-ds {
+				t := time.Now()
 				un := key.Map()["username"].(string)
 				tag := key.Map()["tag"].(string)
-				g, _ := jwt.GenerateToken(c, un, "1", int64(60456))
-				jwthash := h.Mhash(g + ", " + GenOTP())
-				fmt.Println(jwthash)
-				go s.Db_FixOneStuck(bson.M{"email": bson.M{"$eq": email}, "username": bson.M{"$eq": un}}, bson.M{"$addToSet": bson.M{"Sessions": bson.M{"$each": []string{jwthash}}}})
-				am.SEndlogin(un, tag, GenOTP())
+				g, _ := jwt.GenerateToken(c, tag, un, string(t.Format("2006-01-02 15:04:05")), int64(60456))
+				strSessionOTP := g
+				OTP := GenOTP()
+				jwthash := h.Mhash(strSessionOTP)
+				Sessionhash := h.Mhash(OTP + "." + string(t.Format("15:04:05")))
+
+				s.Db_FixOneStuck(bson.M{"email": bson.M{"$eq": email}, "username": bson.M{"$eq": un}}, bson.M{"$push": bson.M{"SessionOTP": bson.M{string(t.Format("2006-01-02 15:04:05")): jwthash + " " + Sessionhash}}})
+				am.SEndlogin(un, tag, OTP, email)
 				c.JSON(200, gin.H{
 					"message": "login suss",
 					"jwt":     g,

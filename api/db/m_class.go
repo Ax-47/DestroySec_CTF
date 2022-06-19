@@ -7,15 +7,15 @@ import (
 	"time"
 	//"github.com/globalsign/mgo"
 	//"github.com/globalsign/mgo/bson"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Db_mongo struct {
-	url        string
-	collection *mongo.Collection
+	url           string
+	collection    *mongo.Collection
+	regcollection *mongo.Collection
 }
 
 func (db *Db_mongo) Db_start() {
@@ -28,72 +28,7 @@ func (db *Db_mongo) Db_start() {
 	defer cte()
 
 	err = client.Connect(ctx)
-	collection := client.Database("WEB").Collection("webidk")
+	db.collection = client.Database("WEB").Collection("webidk")
+	db.regcollection = client.Database("WEB").Collection("unidentify")
 
-	db.collection = collection
-
-}
-func (db Db_mongo) Db_InsertOne(Insert map[string]string) {
-
-	_, err := db.collection.InsertOne(context.TODO(), Insert)
-	if err != nil {
-		fmt.Print(err)
-	}
-}
-
-type DATA struct {
-	Email   string `bson:"Email" json:"Email"`
-	Subdata struct {
-		Password, Username, Tag, UserId string
-	}
-}
-
-func (db Db_mongo) Db_FixOneStuck(filter, update interface{}) {
-
-	_, err := db.collection.UpdateOne(
-		context.Background(),
-		filter,
-		update,
-	)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-func (db Db_mongo) Db_InsertOneS(Insert interface{}) {
-
-	_, err := db.collection.InsertOne(context.TODO(), Insert)
-	if err != nil {
-		fmt.Print(err)
-	}
-}
-func (db Db_mongo) Db_FindtOne(dfkdf string, Username string, c chan primitive.D) error {
-	var result bson.D
-	f := bson.D{{dfkdf, Username}}
-
-	err := db.collection.FindOne(context.TODO(), f).Decode(&result)
-	if err != nil {
-		c <- result
-		return err
-	}
-	c <- result
-	return nil
-}
-func (db Db_mongo) Db_FindALL(dfkdf string, something string) ([]primitive.M, error) {
-
-	f := bson.D{{dfkdf, something}}
-	coll := db.collection
-	axc, err := coll.Find(context.TODO(), f)
-	var results []bson.M
-	if err != nil {
-		fmt.Print(err)
-	}
-	if err = axc.All(context.TODO(), &results); err != nil {
-		panic(err)
-	}
-
-	var result bson.M
-	if err = coll.FindOne(context.TODO(), f).Decode(&result); err != nil {
-		return nil, err
-	}
-	return results, nil
 }

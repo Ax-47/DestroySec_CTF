@@ -15,11 +15,11 @@ type GAmll struct {
 }
 
 func (g *GAmll) Login(Email, Password string) {
-
-	g.Key = smtp.PlainAuth("", "", "", "smtp.gmail.com")
+	g.Email = Email
+	g.Key = smtp.PlainAuth("", Email, Password, "smtp.gmail.com")
 
 }
-func (g GAmll) SEndlogin(Username, tag, otp string) {
+func (g GAmll) SEndlogin(Username, tag, otp, sendto string) {
 	t, err := template.ParseFiles("template/template.html")
 	buf := new(bytes.Buffer)
 	data := struct {
@@ -39,9 +39,9 @@ func (g GAmll) SEndlogin(Username, tag, otp string) {
 		return
 	}
 
-	from := ""
+	from := g.Email
 
-	to := ""
+	to := sendto
 
 	msg := "From: " + from + "\n" +
 		"To: " + to + "\n" +

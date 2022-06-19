@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
-
+import Cookies from 'universal-cookie';
 
 import { Link } from 'react-router-dom'
 import './sign.css'
@@ -18,7 +18,7 @@ import axios from "axios";
 
 
 export default function RegisSign() {
-
+    const cookies = new Cookies();
     const formSchema = Yup.object().shape({
         email: Yup.string()
             .required('Email is mendatory')
@@ -43,8 +43,15 @@ export default function RegisSign() {
         
         console.log(data['username'])
         
-        var dff= axios({url:'http://localhost:9000/reg',method:"post",data:{username:data['username'],email:data['email'],password:data['password'],repassword:data['confirmPwd']},headers:{"X-API-KEY":"ax47"}});
-        console.log(await dff)
+        var dff= axios({url:'http://localhost:9000/apilogin/reg',method:"post",data:{username:data['username'],email:data['email'],password:data['password'],repassword:data['confirmPwd']},headers:{"X-API-KEY":"ax47"}});
+        if (await (await dff).status ===200){
+            window.location.href="/verify"
+            
+            var $tham_po_mue_doo =await (await dff).data["hee"];
+            console.log($tham_po_mue_doo)
+            cookies.set('Destroy',$tham_po_mue_doo, { path: '/',SameSite:"None",secure:true });  
+         
+          }
         return false
     }
 

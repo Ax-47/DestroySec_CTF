@@ -21,9 +21,9 @@ export default function Confirmotp() {
           const { register, handleSubmit, formState } = useForm(formOptions)
           const { errors } = formState
           async function onSubmit(data) {
-            var dff= axios({url:'http://localhost:9000/verifyotp',method:"post",headers:{"jwt":cookies.get("Destroy"),"otp":data["otp"],"X-API-KEY":"ax47"}});
+            var dff= axios({url:'http://localhost:9000/AK',method:"post",headers:{"jwt":cookies.get("Destroy"),"otp":data["otp"],"X-API-KEY":"ax47"}});
+ 
             cookies.set('Destroy',await dff, { path: '/',SameSite:"None",secure:true });
-            
           }
 
     return(
